@@ -2,16 +2,16 @@
 using namespace std;
 
 // MARK: - Node
-struct node {
+struct Node {
     int data;
-    node *next;
+    Node *next;
 };
 
-node *head=NULL , *last=NULL;
-int length=0;
+Node *head=NULL , *last=NULL;
+int length = 0;
 
 // MARK: - Definitions
-void insert(int element);
+void insertWithLoop(int element);
 void insertFirst(int element);
 void insertLast(int element);
 void remove(int val);
@@ -24,86 +24,133 @@ void search ();
 // MARK: - Main
 int main() {
     
-    insert(5);
-    insert(15);
-    insert(25);
-    insert(35);
+//    insert(2);
+//    insert(3);
+//    insert(4);
+//    insertFirst(1);
+//    insertLast(2);
+//    insertLast(3);
+//    insertLast(4);
+//    insertLast(5);
+//    insertLast(6);
+    
+    insertWithLoop(1);
+    insertWithLoop(2);
+    insertWithLoop(3);
+    insertWithLoop(4);
+    
+    remove(4);
+//    remove(6);
+//    remove(5);
+//    remove(4);
+//    remove(3);
+    
     
     display();
-    remove(35);
+    
+    
+    
+    /*remove(35);
     display();
     insert(45);
     display();
-    
-    // printnode();
+    */
+    // printnode();x
     search ();
     return 0;
 }
 
 
 // MARK: - Functions
-void insert(int element) {
-    node* newnode;
-    newnode = new node;
-    newnode -> data = element;
+void insertWithLoop(int element) {
+    Node* newNode;
+    newNode = new Node;
+    newNode -> data = element;
+    
     if (head == NULL) {
-        head = newnode;
-        newnode -> next = NULL;
+        head = newNode;
+        newNode -> next = NULL;
     } else {
         last = head;
+        
         while (last -> next != NULL) {
             last = last -> next;
         }
-        last ->next = newnode;
-        newnode -> next = NULL;
+        last -> next = newNode;
+        last = newNode;
+        newNode -> next = NULL;
     }
+    
     length++;
 }
 
 
-
-void insertFirst(int element) {
-    node *newnode = new node;
-    newnode -> data = element;
-    if ( length == 0) {
-        head =last = newnode;
-        newnode -> next = NULL;
+void insertFirst(int element) { // newNode, 1 , 2 , 3
+    Node *newNode = new Node;
+    newNode -> data = element;
+    
+    if (length == 0) {
+        head = last = newNode;
     } else {
-        last->next=newnode;
-        newnode -> next = NULL;
-        last = newnode;
+        newNode -> next = head;
+        head = newNode;
     }
+    
     length++;
 }
+
+
+void insertLast(int element) { // 1 , 2 , 3 , newNode
+    Node *newNode = new Node;
+    newNode -> data = element;
+    
+    if (length == 0) {
+        head = last = newNode;
+    } else {
+        last -> next = newNode;
+        last = newNode;
+    }
+    newNode -> next = NULL;
+    length++;
+}
+
+
 
 
 void remove(int val) {
-    node* curent, *prev;
+    Node* current, *prev;
     if (length == 0) {
         cout << "The list is empty" << endl;
     } else if ( length == 1) {
-        curent = head;
-        if (curent ->data == val ) {
+        current = head;
+        if (current ->data == val ) {
             head = NULL;
-            free(curent);
+            free(current);
         } else {
             cout << "The value not found" << endl;
         }
     } else {
-        curent = prev = head;
-        while (curent ->data != val) {
-            prev = curent;
-            curent = curent ->next;
+        current = prev = head;
+
+        while (current ->data != val) {
+            prev = current;
+            current = current ->next;
         }
-        prev -> next = curent -> next;
-        free(curent);
+        prev -> next = current -> next;
+        
+        // make the prev is last when we will remove last val
+        if (current -> next == NULL) {
+            last = prev;
+        }
+        
+        free(current);
     }
     length--;
 }
 
 
 void display() {
-    node* currentnode;
+    Node* currentnode;
     if (head == NULL) {
         cout << "The node is empty" << endl;
     } else {
@@ -121,7 +168,7 @@ void display() {
 }
 
 void printnode() {
-    node* curr = head;
+    Node* curr = head;
     int sum = 1;
     int num ;
     cin >> num;
@@ -132,24 +179,10 @@ void printnode() {
     cout << curr ->data <<" " << endl;
 }
 
-void insertLast(int element) {
-    node *newnode = new node;
-    newnode -> data = element;
-    if ( length == 0) {
-        head = last = newnode;
-        newnode -> next = NULL;
-    } else {
-        head -> next = newnode;
-        newnode -> next = NULL;
-        head = newnode;
-    }
-    length++;
-}
-
 
 
 void printnode2() {
-    node* current = head;
+    Node* current = head;
     
     int sum =1;
     int num;
@@ -164,7 +197,7 @@ void printnode2() {
 
 
 void search () {
-    node* current = head;
+    Node* current = head;
     
     int value;
     bool test=1;
